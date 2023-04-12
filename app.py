@@ -1,21 +1,26 @@
 import numpy as np
-from flask import Flask,request,jsonify,render_template
+import streamlit as st
 import pickle
 
-app = Flask(__name__)
 model = pickle.load(open("model.pkl",'rb'))
 
-@app.route('/')
-def home():
-    return render_template("webd.html")
-
-@app.route('/predict',methods = ['POST'])
-def predict():
-    feature = [int(x) for x in request.form.values()]
-    feature = [np.array(feature)]
+def predict(inp):
+    feature = int(inp)
+    feature = [[np.array(feature)]]
+    print(feature)
     prediction = model.predict(feature)
     output = round(prediction[0],2)
-    return render_template('webd.html',prediction_text = "Employee Salary should be $ {}".format(output))
+    res = "Employee Salary should be $ {}".format(output)
+    return res
 
+def main():
+    st.title("Salary Prediction")
+    experience = st.text_input('Years of Experience')
+    result = ''
+
+    if(st.button("Predict")):
+        result = predict(experience)
+    st.success(result)
+    
 if __name__ == '__main__':
-    app.run(debug=False)
+    main()
