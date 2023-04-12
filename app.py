@@ -18,4 +18,4 @@ def predict():
     return render_template('webd.html',prediction_text = "Employee Salary should be $ {}".format(output))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
